@@ -10,331 +10,127 @@ client = OpenAI(api_key=env_vars.get("OPENAI_API_KEY"))
 
 app = FastAPI(title="Resume Builder AI")
 
-cv_format_1 = """
+cover_letter_format_1 = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Curriculum Vitae</title>
+    <title>Cover Letter</title>
     <style>
         * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-html {
-  height: 100%;  
-}
+            box-sizing: border-box;
+        }
 
-body {
-  min-height: 100%;  
-  background: #eee;
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
-  color: #222;
-  font-size: 14px;
-  line-height: 26px;
-  padding-bottom: 50px;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f2f2f2;
+            font-family: "Times New Roman", Times, serif;
+        }
 
-.container {
-  max-width: 700px;   
-  background: #fff;
-  margin: 0px auto 0px; 
-  box-shadow: 1px 1px 2px #DAD7D7;
-  border-radius: 3px;  
-  padding: 40px;
-  margin-top: 50px;
-}
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 40mm 30mm;
+            background: #ffffff;
+            color: #000;
+            line-height: 1.6;
+            font-size: 14pt;
+        }
 
-.header {
-  margin-bottom: 30px;
-  
-  .full-name {
-    font-size: 40px;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-  }
-  
-  .first-name {
-    font-weight: 700;
-  }
-  
-  .last-name {
-    font-weight: 300;
-  }
-  
-  .contact-info {
-    margin-bottom: 20px;
-  }
-  
-  .email ,
-  .phone {
-    color: #999;
-    font-weight: 300;
-  } 
-  
-  .separator {
-    height: 10px;
-    display: inline-block;
-    border-left: 2px solid #999;
-    margin: 0px 10px;
-  }
-  
-  .position {
-    font-weight: bold;
-    display: inline-block;
-    margin-right: 10px;
-    text-decoration: underline;
-  }
-}
+        .header {
+            margin-bottom: 30px;
+        }
 
+        .header p {
+            margin: 2px 0;
+        }
 
-.details {
-  line-height: 20px;
-  
-  .section {
-    margin-bottom: 40px;  
-  }
-  
-  .section:last-of-type {
-    margin-bottom: 0px;  
-  }
-  
-  .section__title {
-    letter-spacing: 2px;
-    color: #54AFE4;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-  }
-  
-  .section__list-item {
-    margin-bottom: 40px;
-  }
-  
-  .section__list-item:last-of-type {
-    margin-bottom: 0;
-  }
-  
-  .left ,
-  .right {
-    vertical-align: top;
-    display: inline-block;
-  }
-  
-  .left {
-    width: 60%;    
-  }
-  
-  .right {
-    tex-align: right;
-    width: 39%;    
-  }
-  
-  .name {
-    font-weight: bold;
-  }
-  
-  a {
-    text-decoration: none;
-    color: #000;
-    font-style: italic;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-    color: #000;
-  }
-  
-  .skills {
-    
-  }
-    
-  .skills__item {
-    margin-bottom: 10px;  
-  }
-  
-  .skills__item .right {
-    input {
-      display: none;
-    }
-    
-    label {
-      display: inline-block;  
-      width: 20px;
-      height: 20px;
-      background: #C3DEF3;
-      border-radius: 20px;
-      margin-right: 3px;
-    }
-    
-    input:checked + label {
-      background: #79A9CE;
-    }
-  }
-}
+        .recipient {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
 
+        .subject {
+            font-weight: bold;
+            margin: 20px 0;
+        }
 
+        .content p {
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+
+        .closing {
+            margin-top: 30px;
+        }
+
+        .signature {
+            margin-top: 40px;
+        }
+
+        /* Print settings */
+        @media print {
+            body {
+                background: none;
+            }
+            .page {
+                margin: 0;
+                box-shadow: none;
+            }
+        }
     </style>
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <div class="full-name">
-      <span class="first-name">John</span> 
-      <span class="last-name">Doe</span>
+<div class="page">
+
+    <div class="header">
+        <p>[Today’s Date]</p>
+        <br>
+        <p>[Your full name]</p>
+        <p>[Your phone number]</p>
+        <p>[Your email]</p>
+        <p>[Your address, city, state, postcode]</p>
+        <p>[Your LinkedIn]</p>
     </div>
-    <div class="contact-info">
-      <span class="email">Email: </span>
-      <span class="email-val">john.doe@gmail.com</span>
-      <span class="separator"></span>
-      <span class="phone">Phone: </span>
-      <span class="phone-val">111-222-3333</span>
+
+    <div class="recipient">
+        <p>[Hiring Manager’s Name]</p>
+        <p>[Company Address, City, State]</p>
+        <p>[Phone number]</p>
+        <p>[Email address]</p>
     </div>
-    
-    <div class="about">
-      <span class="position">Front-End Developer </span>
-      <span class="desc">
-        I am a front-end developer with more than 3 years of experience writing html, css, and js. I'm motivated, result-focused and seeking a successful team-oriented company with opportunity to grow. 
-      </span>
+
+    <p>Dear [Hiring Manager],</p>
+
+    <div class="subject">
+        RE: &lt;insert role title&gt; position
     </div>
-  </div>
-   <div class="details">
-    <div class="section">
-      <div class="section__title">Experience</div>
-      <div class="section__list">
-        <div class="section__list-item">
-          <div class="left">
-            <div class="name">KlowdBox</div>
-            <div class="addr">San Fr, CA</div>
-            <div class="duration">Jan 2011 - Feb 2015</div>
-          </div>
-          <div class="right">
-            <div class="name">Fr developer</div>
-            <div class="desc">did This and that</div>
-          </div>
-        </div>
-                <div class="section__list-item">
-          <div class="left">
-            <div class="name">Akount</div>
-            <div class="addr">San Monica, CA</div>
-            <div class="duration">Jan 2011 - Feb 2015</div>
-          </div>
-          <div class="right">
-            <div class="name">Fr developer</div>
-            <div class="desc">did This and that</div>
-          </div>
-        </div>
 
-      </div>
+    <div class="content">
+        <p>
+            As my resume notes, I have been working in this industry for XXX years, and during that time developed outstanding communication skills, excel knowledge and customer service skills. For instance, while working/studying at XXXX, I gained a deep understanding of all job duties for an XXXX to perform them as efficiently and as diligently as possible.
+        </p>
+
+        <p>
+            I am a highly motivated and very approachable person that always strives for customer satisfaction in the service industry. I’ve been a long-time advocate for your company and the service it provides. Therefore, I would greatly appreciate the opportunity to come and work for you.
+        </p>
+
+        <p>
+            I would like to discuss your XXXX position in detail and would be happy to come in for an interview at any time that’s convenient for you. Thank you for your time and consideration. I look forward to hearing back from you.
+        </p>
     </div>
-    <div class="section">
-      <div class="section__title">Education</div>
-      <div class="section__list">
-        <div class="section__list-item">
-          <div class="left">
-            <div class="name">Sample Institute of technology</div>
-            <div class="addr">San Fr, CA</div>
-            <div class="duration">Jan 2011 - Feb 2015</div>
-          </div>
-          <div class="right">
-            <div class="name">Fr developer</div>
-            <div class="desc">did This and that</div>
-          </div>
-        </div>
-        <div class="section__list-item">
-          <div class="left">
-            <div class="name">Akount</div>
-            <div class="addr">San Monica, CA</div>
-            <div class="duration">Jan 2011 - Feb 2015</div>
-          </div>
-          <div class="right">
-            <div class="name">Fr developer</div>
-            <div class="desc">did This and that</div>
-          </div>
-        </div>
 
-      </div>
-      
-  </div>
-     <div class="section">
-      <div class="section__title">Projects</div> 
-       <div class="section__list">
-         <div class="section__list-item">
-           <div class="name">DSP</div>
-           <div class="text">I am a front-end developer with more than 3 years of experience writing html, css, and js. I'm motivated, result-focused and seeking a successful team-oriented company with opportunity to grow.</div>
-         </div>
-         
-         <div class="section__list-item">
-                    <div class="name">DSP</div>
-           <div class="text">I am a front-end developer with more than 3 years of experience writing html, css, and js. I'm motivated, result-focused and seeking a successful team-oriented company with opportunity to grow. <a href="/login">link</a>
-           </div>
-         </div>
-       </div>
+    <div class="closing">
+        <p>Yours sincerely,</p>
     </div>
-     <div class="section">
-       <div class="section__title">Skills</div>
-       <div class="skills">
-         <div class="skills__item">
-           <div class="left"><div class="name">
-             Javascript
-             </div></div>
-           <div class="right">
-                          <input  id="ck1" type="checkbox" checked/>
 
-             <label for="ck1"></label>
-                          <input id="ck2" type="checkbox" checked/>
+    <div class="signature">
+        <p>[Your name]</p>
+    </div>
 
-              <label for="ck2"></label>
-                         <input id="ck3" type="checkbox" />
-
-              <label for="ck3"></label>
-                           <input id="ck4" type="checkbox" />
-            <label for="ck4"></label>
-                          <input id="ck5" type="checkbox" />
-              <label for="ck5"></label>
-
-           </div>
-         </div>
-         
-       </div>
-       <div class="skills__item">
-           <div class="left"><div class="name">
-             CSS</div></div>
-           <div class="right">
-                          <input  id="ck1" type="checkbox" checked/>
-
-             <label for="ck1"></label>
-                          <input id="ck2" type="checkbox" checked/>
-
-              <label for="ck2"></label>
-                         <input id="ck3" type="checkbox" />
-
-              <label for="ck3"></label>
-                           <input id="ck4" type="checkbox" />
-            <label for="ck4"></label>
-                          <input id="ck5" type="checkbox" />
-              <label for="ck5"></label>
-
-           </div>
-         </div>
-         
-       </div>
-     <div class="section">
-     <div class="section__title">
-       Interests
-       </div>
-       <div class="section__list">
-         <div class="section__list-item">
-                  Football, programming.
-          </div>
-       </div>
-     </div>
-     </div>
-  </div>
 </div>
 
 </body>
@@ -342,7 +138,7 @@ body {
 
 """
 
-cv_format_2 = """
+cover_letter_format_2 = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -930,37 +726,37 @@ page[size="A4"] {
 """
 
 system_prompt = """
-You are an expert CV writer and a web developer. Given the following user details, refine and structure them into a professional CV format. Ensure clarity, conciseness, and relevance to job applications.
+You are an expert cover letter writer and a web developer. Given the following user details, refine and structure them into a professional cover letter format. Ensure clarity, conciseness, and relevance to job applications.
 User Details:
 {details}
 
-CV HTML Format:
+Cover Letter HTML Format:
 {cv_html_format}
 
-Your task is to extract the relevant information from the user details and make a CV in the provided HTML format. Return ONLY the complete HTML code for the CV without any additional explanations or text.
+Your task is to extract the relevant information from the user details and make a cover letter in the provided HTML format. Return ONLY the complete HTML code for the cover letter without any additional explanations or text.
 
 Return ONLY this JSON structure:
 {{
-  "cv": "complete HTML code for the CV",
+  "cv": "complete HTML code for the cover letter",
 }}
 """
 
 class UserDetailsRequest(BaseModel):
     details: str
-    cv_html_format: int
+    cover_letter_html_format: int
     
-@app.post("/refine_resume")
-async def refine_resume(request: UserDetailsRequest):
-    if request.cv_html_format == 1:
-        request.cv_html_format = cv_format_1
+@app.post("/refine_cover_letter")
+async def refine_cover_letter(request: UserDetailsRequest):
+    if request.cover_letter_html_format == 1:
+        request.cover_letter_html_format = cover_letter_format_1
     else:
-        request.cv_html_format = cv_format_2  
-    prompt = system_prompt.format(details=request.details, cv_html_format=request.cv_html_format)
+        request.cover_letter_html_format = cover_letter_format_2  
+    prompt = system_prompt.format(details=request.details, cv_html_format=request.cover_letter_html_format)
     
     response = client.responses.create(
         model="gpt-5-nano",
         input=[
-            {"role": "system", "content": "You are an expert CV writer and web developer assistant whose work is to create professional CVs in HTML format."},
+            {"role": "system", "content": "You are an expert cover letter writer and web developer assistant whose work is to create professional cover letters in HTML format."},
             {"role": "user", "content": prompt}
         ],
         reasoning={"effort": "low"},
@@ -979,8 +775,8 @@ async def refine_resume(request: UserDetailsRequest):
         # html_real = re.sub(r'\\n', '\n', result["cv"])
         # result["cv"] = re.sub(r'\\"', '"', html_real)
         
-        # with open("cv.html", "w", encoding="utf-8") as f:
-        #   f.write(result["cv"])
+        with open("cv.html", "w", encoding="utf-8") as f:
+          f.write(result["cv"])
         print(result["cv"])
         
         
